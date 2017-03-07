@@ -40,11 +40,8 @@ oauth2.getOAuthAccessToken( '', {
 // twitter.getUserTimeline( { screen_name: 'alvinatl', count: '10' }, error, success )
 
 app.get('/', function (request, response) {
-  twitter.getUserTimeline({
-     screen_name: 'alvinatl',
-     count: '10'}, error, success
-   )
-  response.json(success)
+  twitter.getUserTimeline({ screen_name: 'alvinatl', count: '10'}, error, success)
+
 });
 
 
