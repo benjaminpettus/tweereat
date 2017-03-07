@@ -7,22 +7,19 @@ const Twitter = require('twitter-node-client').Twitter;
 const app = express()
 
 app.use( bodyParser.json() );
-app.use( bodyParser.urlencoded ({ extended: true}));
-app.use(express.static(__dirname + '/public'));
+app.use( bodyParser.urlencoded ( { extended: true } ) );
+app.use( express.static(__dirname + '../public/') );
 
 
 
-var error = function (err, response, body) {
-  console.log('error', JSON.stringify(err));
+var error = function ( err, response, body ) {
+  console.log( 'error', JSON.stringify( err ) );
 };
 
-var success = function (data) {
-  console.log('data', data);
+var success = function ( data ) {
+  console.log( 'data', JSON.parse(data) );
 };
 
-app.get('/', function (request, response) {
-  res.render('index');
-})
 //Connecting to Twitter
 var config = {
   "consumerKey": 	"QwpdsreJIUYghOqK77hZ7O2xd",
@@ -31,18 +28,24 @@ var config = {
   "accessTokenSecret":	"UGz3Ynu9nqQKA8pHtMwbyZSmlVvwyNXyVkgONh4e5LuKW",
 }
 
+var twitter = new Twitter( config );
 
 var token = null
-var oauth2 = new OAuth2(config.consumerKey, config.consumerSecret, 'https://api.twitter.com/', null, 'oauth2/token', null);
-oauth2.getOAuthAccessToken('', {
-  'grant_type': 'client_credentials'}, function (e, access_token) {
+var oauth2 = new OAuth2( config.consumerKey, config.consumerSecret, 'https://api.twitter.com/', null, 'oauth2/token', null );
+oauth2.getOAuthAccessToken( '', {
+  'grant_type': 'client_credentials' }, function ( e, access_token ) {
     token = access_token;
 });
 
+// twitter.getUserTimeline( { screen_name: 'alvinatl', count: '10' }, error, success )
 
-var twitter = new Twitter(config);
-
-twitter.getUserTimeline({ screen_name: 'alvinatl', count: '10'}, error, success);
+app.get('/', function (request, response) {
+  twitter.getUserTimeline({
+     screen_name: 'alvinatl',
+     count: '10'}, error, success
+   )
+  response.json(success)
+});
 
 
 
