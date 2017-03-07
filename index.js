@@ -12,16 +12,12 @@ app.use( express.static(__dirname + '../public/') );
 
 
 
-var error = function ( err, response, body ) {
-  console.log( 'error', JSON.stringify( err ) );
-};
+//var error = ;
 
-var success = function ( data ) {
-  console.log( 'data', JSON.parse(data) );
-};
+// var success =
 
 //Connecting to Twitter
-var config = {
+const config = {
   "consumerKey": 	"QwpdsreJIUYghOqK77hZ7O2xd",
   "consumerSecret": "JdZlnGuHJyE9llqj1PNthP6zW5OzuxeVmIFvSdxiItf6eeFsfN",
   "accessToken": 	'30808913-8BbjFkhav7iSq40RhIcemstnMuzdnVWxGRSlAIsHC',
@@ -37,12 +33,18 @@ oauth2.getOAuthAccessToken( '', {
     token = access_token;
 });
 
-// twitter.getUserTimeline( { screen_name: 'alvinatl', count: '10' }, error, success )
+//twitter.getUserTimeline( { screen_name: 'alvinatl', count: '10' }, error, success )
 
-app.get('/', function (request, response) {
-  twitter.getUserTimeline({ screen_name: 'alvinatl', count: '10'}, error, success)
+app.get('/', function( request, response ) {
+  let feed = twitter.getUserTimeline({ screen_name: 'alvinatl', count: '10'},
+      function ( err, response, body ) {
+        console.log( 'error', JSON.stringify( err ) );
+      },
+      function (data ) {
+        response.json(JSON.parse(data))
+      })
+})
 
-});
 
 
 
