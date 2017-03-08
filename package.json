@@ -20,8 +20,19 @@
   "dependencies": {
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
+    "morgan": "^1.8.1",
+    "pg": "^6.1.3",
+    "pg-hstore": "^2.3.2",
     "twit": "^2.2.5",
     "twitter-js-client": "0.0.5",
     "twitter-node-client": "0.0.6"
+  },
+  "development": {
+    "username": "benjaminpettus",
+    "password": null,
+    "database": "tweereat",
+    "host": "127.0.0.1",
+    "port": 5432,
+    "dialect": "ppstgres"
   }
 }
