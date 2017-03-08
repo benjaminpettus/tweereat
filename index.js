@@ -6,6 +6,9 @@ const bodyParser = require('body-parser')
 const logger = require('morgan')
 const Twitter = require('twitter-node-client').Twitter;
 const pug = require('pug')
+const pg = require('pg')
+const path = require('path')
+const connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/tweereat'
 
 
 const app = express()
@@ -37,12 +40,34 @@ oauth2.getOAuthAccessToken( '', {
   'grant_type': 'client_credentials' }, function ( e, access_token ) {
     token = access_token;
 });
-
-// let posts = twitter.getUserTimeline( { screen_name: 'alvinatl', count: '10' }, error, success )
-// console.log('posts', posts);
-
-
-
+//
+// app.post('/', function(request, response) {
+//   const results = [];
+//   const data = twitter.getUserTimeLine({ screen_name: 'alvinatl', count:'5'});
+//   pg.connect(connectionString, function(err, client, done) {
+//     if(err) {
+//       done();
+//       console.log(err);
+//       return response.status(500).json({success: false, data:err})
+//     }
+//     //
+//     client.query('INSERT into posts(text, twitter_id, rt_from) VALUES($1, $2, $3', [ data[0].text,, data[0].id, data[0].entities.user_mentions[0].screen_name])
+//     const query = client.query('SELECT * from posts')
+//     query.on('row', (row) => {
+//       results.push(row)
+//     });
+//     query.on('end', () => {
+//       done();
+//       return res.json(results)
+//     })
+//   })
+// })
+//
+// let twitterData = twitter.getUserTimeline( { screen_name: 'alvinatl', count: '10' }, error, success )
+// // console.log('posts', posts);
+//
+// let posts = JSON.parse(twitterData)
+//
 
 ///////////==========================================================
 app.get('/', function( request, response ) {
@@ -57,11 +82,9 @@ app.get('/', function( request, response ) {
         // console.log('first post id: ', json[0].id)
         // console.log('first post date: ', json[0].created_at)
         // console.log('first post rt from: ', json[0].entities.user_mentions[0].screen_name)
-        response.json(json)
+        response.render('index', json)
       })
 })
-
-// app.post('/', function(request, response))
 
 
 
