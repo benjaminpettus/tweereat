@@ -14,11 +14,12 @@ const connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/
 const app = express()
 
 
-app.use(logger('dev'));
-app.use( bodyParser.json() );
+app.use( express.static(path.join(__dirname, 'public')) );
 app.use( bodyParser.urlencoded ( { extended: true } ) );
-app.use( express.static(__dirname + '../public/') );
+app.use( bodyParser.json() );
+app.use(logger('dev'));
 
+app.set('views', path.join(__dirname, 'views') )
 app.set('view engine', 'pug')
 //var error = ;
 
@@ -45,20 +46,21 @@ oauth2.getOAuthAccessToken( '', {
 // let twitterData = twitter.getUserTimeline( { screen_name: 'alvinatl', count: '10' }, error, success )
 ///////////==========================================================
 app.get('/', function( request, response ) {
- twitter.getUserTimeline({ screen_name: 'alvinatl', count: '10'},
-      function ( err, response, body ) {
-        console.log( 'error', JSON.stringify( err ) );
-      },
-      function (data) {
-        var json = (JSON.parse(data))
-        console.log('first post text: ', json[0].text)
-        console.log('profile image:', json[0].retweeted_status.user.profile_image_url )
-        console.log('first post id: ', json[0].id)
-        console.log('first post date: ', json[0].created_at)
-        console.log('first post rt from: ', json[0].entities.user_mentions[0].screen_name)
-        response.render('index', {tweets: json})
-        //  response.json(json)
-      })
+  twitter.getUserTimeline({ screen_name: 'alvinatl', count: '10'},
+    function ( err, response, body ) {
+      console.log( 'error', JSON.stringify( err ) );
+    },
+    function (data) {
+      var json = (JSON.parse(data))
+      console.log('first post text: ', json[0].text)
+      console.log('profile image:', json[0].retweeted_status.user.profile_image_url )
+      console.log('first post id: ', json[0].id)
+      console.log('first post date: ', json[0].created_at)
+      console.log('first post rt from: ', json[0].entities.user_mentions[0].screen_name)
+      response.render('index', {tweets: json})
+      //  response.json(json)
+    }
+  )
 })
 
 
