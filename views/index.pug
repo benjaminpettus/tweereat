@@ -1,1 +1,10 @@
 extends layout.pug
+
+block content
+  - data
+  ul
+    each post in tweets
+      .post-card
+        p=post.text
+        p=post.created_at
+        p=post.entities.user_mentions[0].screen_name
