@@ -57,7 +57,7 @@ app.get('/', function( request, response ) {
         console.log('first post date: ', json[0].created_at)
         console.log('first post rt from: ', json[0].entities.user_mentions[0].screen_name)
         response.render('index', {tweets: json})
-        // response.json(json)
+        //  response.json(json)
       })
 })
 

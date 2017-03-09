@@ -7,4 +7,6 @@ block content
       .post-card
         p=post.text
         p=post.created_at
-        p=post.entities.user_mentions[0].screen_name
+        - var items = post.entities.user_mentions
+        each item in items
+          p=item.screen_name
