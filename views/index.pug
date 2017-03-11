@@ -7,14 +7,23 @@ html
   body
     h1 TWEEREAT
 
-    - data
-    ul
-      each post in tweets
-        .post-card
-          p=post.text
-          p=post.created_at
-          - var items = post.entities.user_mentions
-          each item in items
-            p=item.screen_name
+    - var data = tweets
+    each thing in data
+      p=thing
+    - var list = feed
+    each stuffs in list
+      p=stuffs.id
+
+    //- ul
+    //-   each post in tweets
+    //-     .post-card
+    //-       h3=post.text
+    //-       p=post.created_at
+    //-       -var nest = post.source
+    //-       each thing in nest
+    //-         p=thing.user
+    //-       - var items = post.entities.user_mentions
+    //-       each item in items
+    //-         p=item.screen_name
 
   script(src='/browser.js')
