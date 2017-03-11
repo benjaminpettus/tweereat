@@ -1,1 +1,20 @@
-extends layout.pug
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    link(href='/styles.css', rel='stylesheet')
+    title TWEEREAT
+  body
+    h1 TWEEREAT
+
+    - data
+    ul
+      each post in tweets
+        .post-card
+          p=post.text
+          p=post.created_at
+          - var items = post.entities.user_mentions
+          each item in items
+            p=item.screen_name
+
+  script(src='/browser.js')

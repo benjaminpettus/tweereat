@@ -14,11 +14,12 @@ const connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/
 const app = express()
 
 
-app.use(logger('dev'));
-app.use( bodyParser.json() );
+app.use( express.static(path.join(__dirname, 'public')) );
 app.use( bodyParser.urlencoded ( { extended: true } ) );
-app.use( express.static(__dirname + '../public/') );
+app.use( bodyParser.json() );
+app.use(logger('dev'));
 
+app.set('views', path.join(__dirname, 'views') )
 app.set('view engine', 'pug')
 //var error = ;
 
@@ -40,50 +41,26 @@ oauth2.getOAuthAccessToken( '', {
   'grant_type': 'client_credentials' }, function ( e, access_token ) {
     token = access_token;
 });
-//
-// app.post('/', function(request, response) {
-//   const results = [];
-//   const data = twitter.getUserTimeLine({ screen_name: 'alvinatl', count:'5'});
-//   pg.connect(connectionString, function(err, client, done) {
-//     if(err) {
-//       done();
-//       console.log(err);
-//       return response.status(500).json({success: false, data:err})
-//     }
-//     //
-//     client.query('INSERT into posts(text, twitter_id, rt_from) VALUES($1, $2, $3', [ data[0].text,, data[0].id, data[0].entities.user_mentions[0].screen_name])
-//     const query = client.query('SELECT * from posts')
-//     query.on('row', (row) => {
-//       results.push(row)
-//     });
-//     query.on('end', () => {
-//       done();
-//       return res.json(results)
-//     })
-//   })
-// })
-//
-// let twitterData = twitter.getUserTimeline( { screen_name: 'alvinatl', count: '10' }, error, success )
-// // console.log('posts', posts);
-//
-// let posts = JSON.parse(twitterData)
-//
 
+//     client.query('INSERT into posts(text, twitter_id, rt_from) VALUES($1, $2, $3', [ data[0].text,, data[0].id, data[0].entities.user_mentions[0].screen_name])
+// let twitterData = twitter.getUserTimeline( { screen_name: 'alvinatl', count: '10' }, error, success )
 ///////////==========================================================
 app.get('/', function( request, response ) {
- twitter.getUserTimeline({ screen_name: 'alvinatl', count: '2'},
-      function ( err, response, body ) {
-        console.log( 'error', JSON.stringify( err ) );
-      },
-      function (data) {
-        var json = (JSON.parse(data))
-
-        // console.log('first post text: ', json[0].text)
-        // console.log('first post id: ', json[0].id)
-        // console.log('first post date: ', json[0].created_at)
-        // console.log('first post rt from: ', json[0].entities.user_mentions[0].screen_name)
-        response.render('index', json)
-      })
+  twitter.getUserTimeline({ screen_name: 'alvinatl', count: '10'},
+    function ( err, response, body ) {
+      console.log( 'error', JSON.stringify( err ) );
+    },
+    function (data) {
+      var json = (JSON.parse(data))
+      console.log('first post text: ', json[0].text)
+      console.log('profile image:', json[0].retweeted_status.user.profile_image_url )
+      console.log('first post id: ', json[0].id)
+      console.log('first post date: ', json[0].created_at)
+      console.log('first post rt from: ', json[0].entities.user_mentions[0].screen_name)
+      response.render('index', {tweets: json})
+      //  response.json(json)
+    }
+  )
 })
 
 
