@@ -52,7 +52,7 @@ app.get('/', function( request, response ) {
     },
     function (data) {
       var json = (JSON.parse(data))
-      console.log('first post text: ', json[0].text)
+      console.log('first post text: ', json[0])
       console.log('profile image:', json[0].retweeted_status.user.profile_image_url )
       console.log('first post id: ', json[0].id)
       console.log('first post date: ', json[0].created_at)
